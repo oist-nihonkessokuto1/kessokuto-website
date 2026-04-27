@@ -1,0 +1,83 @@
+---
+description: 政党Webサイト開発のプロジェクトルール
+alwaysApply: true
+---
+プロジェクトルール
+===
+
+## 0. 規範表現（RFC 2119）と Lint方針
+
+このドキュメントの規範キーワードは以下の意味で扱う：
+- **MUST**: 必須。違反はPRをブロックする
+- **SHOULD**: 強い推奨。違反は警告（許可する場合は理由を残す）
+- **MAY**: 任意（推奨策・選択肢）
+- **MUST NOT**: 禁止。違反はPRをブロックする
+
+Lint可能化のため、規範ルールは **Rule ID** を持つ。
+- 形式: `SYW-<DOMAIN>-<NNN>`（例: `SYW-UI-001`）
+- 併記: `[ID][LEVEL][CHECK]`
+  - LEVEL: MUST / SHOULD / MAY / MUST NOT
+  - CHECK:
+    - `grep`: 文字列パターンで検出可能
+    - `ast`: TypeScript AST解析が必要
+    - `config`: 設定ファイルの検査
+    - `manual`: 自動化困難（レビュー項目）
+
+本ドキュメント本文の記述と、「0.1 Lintルールカタログ（機械可読）」が矛盾した場合、
+**Lintルールカタログを優先**する（CIの単一の真実）。
+
+### 0.1.1 ルール一覧（要約）
+
+| ID | LEVEL | CHECK | 対象 | 要件（要約） |
+|---|---|---|---|---|
+| SYW-PROJ-001 | MUST | manual | 全体 | 政党Webサイトとして、政策・議員・ニュース・選挙・支援・基本情報を分かりやすく公開する |
+| SYW-STACK-001 | MUST | config | 技術 | Preact / Vite / Tailwind CSS / daisyUI を基本技術として使う |
+| SYW-DEPLOY-001 | MUST | config | 配信 | GitHub Actions でビルドし、GitHub Pages から静的配信する |
+| SYW-CONTENT-001 | MUST | manual | コンテンツ | サイト内容は `readme.md` の素案または明示された資料を根拠にする |
+| SYW-CONTENT-002 | MUST NOT | manual | コンテンツ | 根拠のない政策・人物・選挙情報、差別扇動、暴力扇動、違法行為の助長を追加しない |
+| SYW-UI-001 | SHOULD | manual | UI | 政党サイトとして信頼感・可読性・導線の明快さを優先する |
+| SYW-A11Y-001 | SHOULD | manual | UI | モバイル対応、キーボード操作、代替テキスト、色コントラストに配慮する |
+| SYW-PERF-001 | SHOULD | manual | 実装 | 静的サイトとして軽量に保ち、不要なクライアント処理を増やさない |
+| SYW-SEC-001 | MUST | manual | 全体 | APIキー、個人情報、未公開の選挙・寄付情報などの秘密情報をコミットしない |
+
+## 1. 目的・スコープ
+このプロジェクトでは、政党の公式Webサイトを制作する。訪問者が政策、議員、ニュース、選挙情報、支援方法、基本情報へ迷わず到達できる静的サイトを目標とする。
+
+対象はフロントエンド、コンテンツ構成、ビルド・配信設定、GitHub Pages 公開に関わるファイルである。実装時は本ルールと `readme.md` の素案を優先し、素案にない政治的主張や事実情報はユーザーの明示なしに追加しない。
+
+## 2. 技術スタック
+
+- [SYW-STACK-001][MUST][config] フロントエンドは Preact と Vite を基盤にする。
+- [SYW-STACK-001][MUST][config] スタイリングは Tailwind CSS と daisyUI を基本にし、独自CSSは必要な範囲に限定する。
+- [SYW-PERF-001][SHOULD][manual] SSGでビルドしてGitHub Pages での静的配信を前提に、サーバー実行が必要な設計を避ける。
+- [SYW-PERF-001][SHOULD][manual] 画像、フォント、JavaScript の追加は表示品質と読み込み速度のバランスを確認して行う。
+
+## 3. 配信・CI
+
+- [SYW-DEPLOY-001][MUST][config] GitHub Actions で依存関係のインストールと Vite ビルドを実行する。
+- [SYW-DEPLOY-001][MUST][config] ビルド成果物は GitHub Pages から配信できる構成にする。
+- [SYW-DEPLOY-001][MUST][config] Pages のベースパス、成果物ディレクトリ、ルーティングは Vite と GitHub Pages の仕様に合わせる。
+- [SYW-SEC-001][MUST][manual] CI には公開可能な設定のみ置き、秘密情報はリポジトリに含めない。
+
+## 4. コンテンツ方針
+
+- [SYW-CONTENT-001][MUST][manual] 初期コンテンツは `readme.md` の素案を根拠に、政策、議員、ニュース、選挙、支援、基本情報、問い合わせ、メディアの導線へ整理する。
+- [SYW-CONTENT-001][MUST][manual] 政策文言は意味が変わらないように扱い、要約・見出し化する場合も主張の強さや対象を勝手に変更しない。
+- [SYW-CONTENT-002][MUST NOT][manual] 実在人物、候補者、役員、所在地、選挙結果、寄付方法などの具体情報は、根拠資料がない状態で作成しない。
+- [SYW-CONTENT-002][MUST NOT][manual] 差別扇動、暴力扇動、違法行為の助長、個人攻撃、根拠のない断定をサイト文面に追加しない。
+- [SYW-CONTENT-001][MUST][manual] ニュースや選挙情報は、日付、見出し、本文、関連リンクのように後から更新しやすい構造を優先する。
+
+## 5. UI・アクセシビリティ
+
+- [SYW-UI-001][SHOULD][manual] トップページでは、党の主張、主要政策、最新ニュース、支援導線を優先して提示する。
+- [SYW-UI-001][SHOULD][manual] 政党サイトとして、装飾よりも信頼感、可読性、情報の探しやすさを重視する。
+- [SYW-A11Y-001][SHOULD][manual] 主要な操作はキーボードで利用できるようにし、リンクやボタンの目的が文脈なしでも分かる文言にする。
+- [SYW-A11Y-001][SHOULD][manual] 画像には適切な代替テキストを付け、テキストと背景のコントラストを確保する。
+- [SYW-A11Y-001][SHOULD][manual] スマートフォン、タブレット、デスクトップで破綻しないレスポンシブ設計にする。
+
+## 6. 実装時の注意
+
+- [SYW-PROJ-001][MUST][manual] 変更はユーザーの依頼範囲に限定し、ルール作成、設計、実装を混同しない。
+- [SYW-STACK-001][MUST][config] 既存の Preact/Vite 構成がある場合はそれを尊重し、不要なフレームワーク移行を行わない。
+- [SYW-UI-001][SHOULD][manual] Tailwind と daisyUI の既存パターンを優先し、同じ役割のスタイル表現を乱立させない。
+- [SYW-SEC-001][MUST][manual] 問い合わせ、意見投稿、寄付などの機能を扱う場合は、保存先、外部サービス、個人情報の扱いを先に確認する。
