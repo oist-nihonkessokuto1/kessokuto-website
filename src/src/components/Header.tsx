@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
+import { appUrl } from '../lib/appUrl';
+
 const navItems = [
-	{ href: '/policy', label: '政策' },
-	{ href: '/lawmakers', label: '議員' },
-	{ href: '/news', label: 'ニュース' },
-	{ href: '/elections', label: '選挙' },
-	{ href: '/support', label: '支援' },
+	{ path: '/policy', label: '政策' },
+	{ path: '/lawmakers', label: '議員' },
+	{ path: '/news', label: 'ニュース' },
+	{ path: '/elections', label: '選挙' },
+	{ path: '/support', label: '支援' },
 ] as const;
 
 const sidebarLinks = [
-	{ href: '/party', label: '基本情報' },
-	{ href: '/contact', label: '問い合わせ' },
-	{ href: '/media', label: 'メディア' },
+	{ path: '/party', label: '基本情報' },
+	{ path: '/contact', label: '問い合わせ' },
+	{ path: '/media', label: 'メディア' },
 ] as const;
 
 function MenuIcon() {
@@ -63,7 +65,7 @@ export function Header() {
 		<header class="border-b border-base-300 bg-base-100">
 			<nav class="navbar mx-auto max-w-6xl flex-nowrap gap-0 px-4">
 				<a
-					href="/"
+					href={appUrl('/')}
 					class="shrink-0 text-2xl font-semibold normal-case tracking-tight text-2xl text-base-content transition-colors hover:text-primary"
 				>
 					日本結束党
@@ -72,9 +74,9 @@ export function Header() {
 					<div class="hidden flex-wrap justify-end gap-0.5 md:flex">
 						{navItems.map((item) => (
 							<a
-								href={item.href}
+								href={appUrl(item.path)}
 								class={`rounded-md px-3 py-2 font-medium transition-colors hover:bg-base-200 ${
-									url === item.href ? 'bg-base-200 text-primary' : 'text-base-content'
+									url === appUrl(item.path) ? 'bg-base-200 text-primary' : 'text-base-content'
 								}`}
 							>
 								{item.label}
@@ -88,7 +90,7 @@ export function Header() {
 						<ul class="menu dropdown-content z-10 mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
 							{navItems.map((item) => (
 								<li>
-									<a href={item.href} class={url === item.href ? 'active' : ''}>
+									<a href={appUrl(item.path)} class={url === appUrl(item.path) ? 'active' : ''}>
 										{item.label}
 									</a>
 								</li>
@@ -147,14 +149,14 @@ export function Header() {
 				<nav class="min-h-0 flex-1 overflow-y-auto p-4">
 					<ul class="space-y-1">
 						{sidebarLinks.map((link) => (
-							<li key={link.href}>
+							<li key={link.path}>
 								<a
-									href={link.href}
+									href={appUrl(link.path)}
 									class={`link link-hover block py-2 text-base ${
-										url === link.href ? 'font-semibold text-primary' : ''
+										url === appUrl(link.path) ? 'font-semibold text-primary' : ''
 									}`}
 									onClick={closeSidebar}
-									aria-current={url === link.href ? 'page' : undefined}
+									aria-current={url === appUrl(link.path) ? 'page' : undefined}
 								>
 									{link.label}
 								</a>

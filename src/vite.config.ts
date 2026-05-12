@@ -3,7 +3,9 @@ import preact from '@preact/preset-vite';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
+// GitHub Actions から `BASE_PATH`（例: `/repo-name/`）を渡すと GitHub Pages のプロジェクトサイト向けビルドになる
 export default defineConfig({
+	base: process.env.BASE_PATH || '/',
 	plugins: [
 		preact({
 			prerender: {

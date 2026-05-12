@@ -1,3 +1,5 @@
+import { appUrl } from '../../lib/appUrl';
+
 const policies = [
 	{
 		title: '自治協同',
@@ -24,12 +26,12 @@ const supportLinks = [
 ] as const;
 
 const siteSections = [
-	{ href: '/policy', title: '政策', text: '国家観、立ち向かう課題、主要政策を確認する' },
-	{ href: '/lawmakers', title: '議員', text: '所属議員、候補予定者、役員の情報へ進む' },
-	{ href: '/elections', title: '選挙', text: '選挙日程、候補者、公認情報、結果を見る' },
-	{ href: '/party', title: '基本情報', text: '綱領、規約、所在地、党の歴史を確認する' },
-	{ href: '/contact', title: '問い合わせ', text: '問い合わせ、意見投稿、よくある質問へ進む' },
-	{ href: '/media', title: 'メディア', text: 'YouTube、SNS、動画、出演情報を探す' },
+	{ path: '/policy', title: '政策', text: '国家観、立ち向かう課題、主要政策を確認する' },
+	{ path: '/lawmakers', title: '議員', text: '所属議員、候補予定者、役員の情報へ進む' },
+	{ path: '/elections', title: '選挙', text: '選挙日程、候補者、公認情報、結果を見る' },
+	{ path: '/party', title: '基本情報', text: '綱領、規約、所在地、党の歴史を確認する' },
+	{ path: '/contact', title: '問い合わせ', text: '問い合わせ、意見投稿、よくある質問へ進む' },
+	{ path: '/media', title: 'メディア', text: 'YouTube、SNS、動画、出演情報を探す' },
 ] as const;
 
 export function Home() {
@@ -50,10 +52,10 @@ export function Home() {
 							日本結束党は、政治・社会・経済の分断と衰退に向き合い、自治協同、万邦共栄、経済離陸を柱に、平和的で建設的な変革を掲げます。
 						</p>
 						<div class="mt-8 flex flex-col gap-3 sm:flex-row">
-							<a href="/policy" class="btn btn-primary">
+							<a href={appUrl('/policy')} class="btn btn-primary">
 								政策を読む
 							</a>
-							<a href="/support" class="btn btn-outline btn-primary">
+							<a href={appUrl('/support')} class="btn btn-outline btn-primary">
 								支援に参加する
 							</a>
 						</div>
@@ -103,7 +105,7 @@ export function Home() {
 						<p class="text-sm font-semibold text-primary">ニュース</p>
 						<h2 class="mt-3 text-3xl font-bold tracking-tight">いま扱う論点</h2>
 						<p class="mt-4 leading-7 text-base-800">ニュースは日付、見出し、本文、関連リンクを追加しやすい構造で更新していきます。</p>
-						<a href="/news" class="btn btn-link mt-4 px-0 text-primary">
+						<a href={appUrl('/news')} class="btn btn-link mt-4 px-0 text-primary">
 							ニュース一覧へ
 						</a>
 					</div>
@@ -128,7 +130,7 @@ export function Home() {
 					</div>
 					<div class="grid gap-3">
 						{supportLinks.map((link) => (
-							<a key={link.label} href="/support" class="rounded-2xl border border-base-300 bg-base-200 p-5 transition hover:border-primary hover:bg-base-300">
+							<a key={link.label} href={appUrl('/support')} class="rounded-2xl border border-base-300 bg-base-200 p-5 transition hover:border-primary hover:bg-base-300">
 								<span class="font-semibold text-primary">{link.label}</span>
 								<span class="mt-2 block text-sm leading-6 text-base-800">{link.description}</span>
 							</a>
@@ -144,13 +146,13 @@ export function Home() {
 							<p class="text-sm font-semibold text-primary">サイト案内</p>
 							<h2 class="mt-3 text-3xl font-bold tracking-tight">知りたい情報へ進む</h2>
 						</div>
-						<a href="/contact" class="btn btn-accent">
+						<a href={appUrl('/contact')} class="btn btn-accent">
 							問い合わせ
 						</a>
 					</div>
 					<div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 						{siteSections.map((section) => (
-							<a key={section.href} href={section.href} class="rounded-2xl bg-base-100 p-5 transition hover:bg-base-300">
+							<a key={section.path} href={appUrl(section.path)} class="rounded-2xl bg-base-100 p-5 transition hover:bg-base-300">
 								<h3 class="font-semibold">{section.title}</h3>
 								<p class="mt-2 text-sm leading-6 text-base-700">{section.text}</p>
 							</a>
